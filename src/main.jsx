@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
 
@@ -101,6 +101,7 @@ const ctaBears = [
   { top: "78%", left: "94%", size: "102px", rotate: "-18deg", opacity: 0.22 }
 ];
 
+const assetUrl = (path) => `${import.meta.env.BASE_URL}${path}`;
 const mapsUrl = "https://maps.app.goo.gl/TPPRj9rDiY4FCncu7";
 
 const formatPrice = (value) =>
@@ -119,7 +120,7 @@ const labelize = (text) =>
 function BrandMark() {
   return (
     <div className="brand-mark" aria-label="Moodzzy">
-      <img className="logo-image" src="/Logo.png" alt="" />
+      <img className="logo-image" src={assetUrl("Logo.png")} alt="" />
       <span className="brand-name">Moodzzy</span>
     </div>
   );
@@ -131,7 +132,7 @@ function DecorativeBears({ bears }) {
       {bears.map((bear, index) => (
         <img
           className="floating-bear"
-          src="/Icon_No_Fondo.png"
+          src={assetUrl("Icon_No_Fondo.png")}
           alt=""
           key={`${bear.top}-${bear.left}-${index}`}
           style={{
@@ -184,26 +185,67 @@ function ChipList({ items }) {
 }
 
 function App() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
   return (
     <main>
       <header className="site-header">
         <a className="nav-brand" href="#inicio" aria-label="Moodzzy inicio">
           <BrandMark />
         </a>
-        <nav aria-label="Principal">
+        <nav className="desktop-nav" aria-label="Principal">
           <a href="#menu">Menu</a>
           <a href="#sabores">Sabores</a>
+          <a href="#ubicacion">Ubicacion</a>
           <a href="https://www.instagram.com/moodzzy_cr" target="_blank" rel="noreferrer">
             @Moodzzy_cr
           </a>
         </nav>
+        <button
+          className="menu-toggle"
+          type="button"
+          aria-label="Abrir menu"
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-menu"
+          onClick={() => setIsMobileMenuOpen(true)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </header>
 
+      <div
+        className={`mobile-menu-backdrop ${isMobileMenuOpen ? "is-open" : ""}`}
+        onClick={closeMobileMenu}
+        aria-hidden="true"
+      />
+      <aside
+        className={`mobile-menu ${isMobileMenuOpen ? "is-open" : ""}`}
+        id="mobile-menu"
+        aria-hidden={!isMobileMenuOpen}
+      >
+        <button className="menu-close" type="button" aria-label="Cerrar menu" onClick={closeMobileMenu}>
+          <span />
+          <span />
+        </button>
+        <BrandMark />
+        <nav className="mobile-nav" aria-label="Menu movil">
+          <a href="#menu" onClick={closeMobileMenu}>Menu</a>
+          <a href="#sabores" onClick={closeMobileMenu}>Sabores</a>
+          <a href="#ubicacion" onClick={closeMobileMenu}>Ubicacion</a>
+          <a href="https://www.instagram.com/moodzzy_cr" target="_blank" rel="noreferrer" onClick={closeMobileMenu}>
+            @Moodzzy_cr
+          </a>
+        </nav>
+      </aside>
+
       <section className="hero" id="inicio">
-        <img src="/moodzzy-hero.png" alt="" className="hero-image" />
+        <img src={assetUrl("moodzzy-hero.png")} alt="" className="hero-image" />
         <div className="hero-overlay" />
         <div className="hero-content">
-          <img className="hero-logo" src="/Logo.png" alt="Logo de Moodzzy" />
+          <img className="hero-logo" src={assetUrl("Logo.png")} alt="Logo de Moodzzy" />
           <p className="eyebrow">Gelatos, waffles y frozen drinks</p>
           <h1>Moodzzy</h1>
           <p className="hero-copy">
